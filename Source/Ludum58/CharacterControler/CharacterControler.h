@@ -13,6 +13,8 @@ class LUDUM58_API ACharacterControler : public ACharacter
 public:
 	ACharacterControler();
 
+	void TogglePause(const FInputActionValue& Value);
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -49,11 +51,18 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* PauseAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<class UPauseMenuWidget> PauseMenuWidgetClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game")
 	bool bIsPaused = false;
+	
+	UPROPERTY()
+	class UPauseMenuWidget* PauseMenuWidget;
 
-	void TogglePause(const FInputActionValue& Value);
+	void ShowPauseMenu();
+	void HidePauseMenu();
 	
 private:
 	// Движение

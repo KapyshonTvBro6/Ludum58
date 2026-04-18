@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
+#include "Ludum58/UI/PauseMenuWidget.h"
 #include "Ludum58/Interface/InteractableInterface.h"
 
 ACharacterControler::ACharacterControler()
@@ -147,17 +148,40 @@ void ACharacterControler::TogglePause(const FInputActionValue& Value)
     APlayerController* PC = GetController<APlayerController>();
     if (PC)
     {
-        PC->bShowMouseCursor = bIsPaused;
-        
         if (bIsPaused)
         {
-            // Курсор виден, клики идут в UI
+            // Показываем меню паузы
+            ShowPauseMenu();
+            PC->bShowMouseCursor = true;
             PC->SetInputMode(FInputModeUIOnly());
         }
         else
         {
-            // Курсор скрыт, клики/движения идут в игру
+            // Скрываем меню паузы
+            HidePauseMenu();
+            PC->bShowMouseCursor = false;
             PC->SetInputMode(FInputModeGameOnly());
         }
+    }
+}
+
+void ACharacterControler::ShowPauseMenu()
+{
+    if (!PauseMenuWidget && PauseMenuWidgetClass)
+    {
+        PauseMenuWidget = CreateWidget<UPauseMenuWidget>(GetWorld(), PauseMenuWidgetClass);
+    }
+
+    if (PauseMenuWidget && !PauseMenuWidget->IsInViewport())
+    {
+        PauseMenuWidget->AddToViewport();
+    }
+}
+
+void ACharacterControler::HidePauseMenu()
+{
+    if (PauseMenuWidget && PauseMenuWidget->IsInViewport())
+    {
+        PauseMenuWidget->RemoveFromParent();
     }
 }
