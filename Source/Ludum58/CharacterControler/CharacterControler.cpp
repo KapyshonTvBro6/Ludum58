@@ -4,6 +4,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Kismet/GameplayStatics.h"
 #include "Ludum58/Interface/InteractableInterface.h"
 
 ACharacterControler::ACharacterControler()
@@ -58,7 +59,12 @@ void ACharacterControler::SetupPlayerInputComponent(UInputComponent* PlayerInput
         {
             EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACharacterControler::Move);
         }
-
+        
+        if (PauseAction)
+        {
+            EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &ACharacterControler::TogglePause);
+        }
+        
         if (LookAction)
         {
             EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACharacterControler::Look);
@@ -129,6 +135,29 @@ void ACharacterControler::TraceForInteraction()
         {
             IInteractableInterface::Execute_OnInteract(HitActor);
             UE_LOG(LogTemp, Log, TEXT("Взаимодействие с: %s"), *HitActor->GetName());
+        }
+    }
+}
+
+void ACharacterControler::TogglePause(const FInputActionValue& Value)
+{
+    bIsPaused = !bIsPaused;
+    UGameplayStatics::SetGamePaused(GetWorld(), bIsPaused);
+
+    APlayerController* PC = GetController<APlayerController>();
+    if (PC)
+    {
+        PC->bShowMouseCursor = bIsPaused;
+        
+        if (bIsPaused)
+        {
+            // Курсор виден, клики идут в UI
+            PC->SetInputMode(FInputModeUIOnly());
+        }
+        else
+        {
+            // Курсор скрыт, клики/движения идут в игру
+            PC->SetInputMode(FInputModeGameOnly());
         }
     }
 }

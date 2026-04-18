@@ -45,8 +45,16 @@ protected:
 	UInteractionComponent* InteractionComp;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Specifications")
-	float mousSpeed = 1.0f;
+	float mousSpeed = 1.5f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* PauseAction;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game")
+	bool bIsPaused = false;
+
+	void TogglePause(const FInputActionValue& Value);
+	
 private:
 	// Движение
 	void Move(const FInputActionValue& Value);
