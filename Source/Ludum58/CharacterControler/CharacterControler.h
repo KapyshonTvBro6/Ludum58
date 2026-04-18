@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "InteractionComponent.h"
 #include "CharacterControler.generated.h"
 
 UCLASS()
@@ -39,6 +40,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* InteractAction;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction")
+	UInteractionComponent* InteractionComp;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Specifications")
+	float mousSpeed = 1.0f;
 
 private:
 	// Движение
