@@ -24,9 +24,9 @@ ACharacterControler::ACharacterControler()
 
     // Настройка движения
     GetCharacterMovement()->bOrientRotationToMovement = false;
-    GetCharacterMovement()->JumpZVelocity = 600.f;
-    GetCharacterMovement()->AirControl = 0.2f;
-    GetCharacterMovement()->MaxWalkSpeed = 600.f;
+    GetCharacterMovement()->JumpZVelocity = jumpStrong;
+    GetCharacterMovement()->AirControl = mousSpeed;
+    GetCharacterMovement()->MaxWalkSpeed = wolkSpeed;
     
     InteractionComp = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComp"));
 }
@@ -111,8 +111,8 @@ void ACharacterControler::Look(const FInputActionValue& Value)
     if (Controller != nullptr)
     {
         // Добавляем вращение по Y (поворот) и X (наклон головы)
-        AddControllerYawInput(LookAxisVector.X * mousSpeed);
-        AddControllerPitchInput(LookAxisVector.Y * -mousSpeed);
+        AddControllerYawInput(LookAxisVector.X);
+        AddControllerPitchInput(LookAxisVector.Y * -1);
     }
 }
 
