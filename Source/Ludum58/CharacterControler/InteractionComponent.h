@@ -17,6 +17,9 @@ public:
 
 protected:
     virtual void BeginPlay() override;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction|Config", meta = (ClampMin = "0"))
+    int32 IdItem = 0;
 
 private:
     UPROPERTY(EditAnywhere, Category = "Interaction|Config")

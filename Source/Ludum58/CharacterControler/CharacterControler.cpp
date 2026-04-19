@@ -134,8 +134,13 @@ void ACharacterControler::TraceForInteraction()
         AActor* HitActor = HitResult.GetActor();
         if (HitActor && HitActor->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
         {
-            IInteractableInterface::Execute_OnInteract(HitActor);
-            UE_LOG(LogTemp, Log, TEXT("Взаимодействие с: %s"), *HitActor->GetName());
+            // 🦊 ИСПРАВЛЕНИЕ: Передаем 3 аргумента
+            // 1. TargetActor (на кого попали)
+            // 2. PlayerController (this - кто нажал)
+            // 3. IdItem (1 - какой ID передать, например, для теста)
+            IInteractableInterface::Execute_OnInteract(HitActor, this, 0);
+            
+            UE_LOG(LogTemp, Log, TEXT("🔔 Взаимодействие с: %s (ID: 1)"), *HitActor->GetName());
         }
     }
 }

@@ -2,6 +2,7 @@
 #include "Camera/CameraComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "Ludum58/CharacterControler/CharacterControler.h"
 #include "Ludum58/Interface/InteractableInterface.h"
 
 UInteractionComponent::UInteractionComponent()
@@ -14,7 +15,6 @@ void UInteractionComponent::BeginPlay()
 {
     Super::BeginPlay();
 
-    // Ищем камеру у владельца (не зависит от имени класса персонажа)
     if (AActor* Owner = GetOwner())
     {
         CachedCamera = Owner->FindComponentByClass<UCameraComponent>();
@@ -30,7 +30,7 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-    if (!CachedCamera || !IsValid(GetWorld())) return;
+    if (!CachedCamera) return;
 
     FVector Start = CachedCamera->GetComponentLocation();
     FVector End = Start + (CachedCamera->GetForwardVector() * TraceDistance);
@@ -38,11 +38,14 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
     FCollisionQueryParams Params(SCENE_QUERY_STAT(InteractTrace), true, GetOwner());
     FHitResult Hit;
 
+    // Пускаем луч
     if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
     {
-        if (AActor* HitActor = Hit.GetActor())
+        AActor* HitActor = Hit.GetActor();
+        
+        if (HitActor && HitActor->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
         {
-            if (HitActor != TargetActor)
+            if (TargetActor != HitActor)
             {
                 TargetActor = HitActor;
                 ShowWidget(HitActor);
@@ -50,8 +53,6 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
             return;
         }
     }
-
-    // Луч не попал ни во что, а объект был выбран
     if (TargetActor)
     {
         HideWidget();
@@ -77,9 +78,14 @@ void UInteractionComponent::HideWidget()
 
 void UInteractionComponent::OnInteractPressed()
 {
-    if (TargetActor && TargetActor->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
+    if (!TargetActor) return;
+
+    if (TargetActor->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
     {
-        IInteractableInterface::Execute_OnInteract(TargetActor);
+        ACharacterControler* PlayerChar = Cast<ACharacterControler>(GetOwner());
+        
+        IInteractableInterface::Execute_OnInteract(TargetActor, PlayerChar, IdItem);
+        
         HideWidget();
         TargetActor = nullptr;
     }
