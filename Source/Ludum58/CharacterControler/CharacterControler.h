@@ -47,7 +47,13 @@ protected:
 	UInteractionComponent* InteractionComp;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Specifications")
-	float mousSpeed = 1.5f;
+	float mousSpeed = 2.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Specifications")
+	float wolkSpeed = 600.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Specifications")
+	float jumpStrong = 600.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* PauseAction;
