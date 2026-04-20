@@ -16,7 +16,6 @@ AInteractableItem::AInteractableItem()
 void AInteractableItem::InteractMe(int32 IdItem)
 {
     UE_LOG(LogTemp, Warning, TEXT("🦊 InteractMe вызван! ID: %d"), IdItem);
-    IdItem = 1;
     switch (IdItem)
     {
     case 1:

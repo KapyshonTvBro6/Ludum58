@@ -11,11 +11,7 @@ class LUDUM58_API AInteractableItem : public AActor, public IInteractableInterfa
 
 public:
     AInteractableItem();
-
-    // ✅ Обязательно: virtual + _Implementation + override + полная сигнатура
-    //virtual void OnInteract_Implementation(ACharacterControler* PlayerController, int32 IdItem) override;
     
-    // Твоя вспомогательная функция
     UFUNCTION(BlueprintCallable, Category = "Interaction")
     void InteractMe(int32 IdItem);
 

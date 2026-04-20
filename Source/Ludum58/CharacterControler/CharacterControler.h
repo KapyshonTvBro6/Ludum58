@@ -14,6 +14,9 @@ public:
 	ACharacterControler();
 
 	void TogglePause(const FInputActionValue& Value);
+	
+	UPROPERTY(BlueprintReadWrite, Category = "Inventory|State")
+	int32 CurrentInteractionId = 0;
 
 protected:
 	virtual void BeginPlay() override;

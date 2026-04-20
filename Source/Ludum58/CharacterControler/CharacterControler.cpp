@@ -79,7 +79,7 @@ void ACharacterControler::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
         if (InteractAction)
         {
-            EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ACharacterControler::Interact);
+            EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, InteractionComp, &UInteractionComponent::OnInteractPressed);
         }
     }
 }

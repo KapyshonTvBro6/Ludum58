@@ -84,7 +84,7 @@ void UInteractionComponent::OnInteractPressed()
     {
         ACharacterControler* PlayerChar = Cast<ACharacterControler>(GetOwner());
         
-        IInteractableInterface::Execute_OnInteract(TargetActor, PlayerChar, IdItem);
+        IInteractableInterface::Execute_OnInteract(TargetActor, PlayerChar, PlayerChar->CurrentInteractionId);
         
         HideWidget();
         TargetActor = nullptr;

@@ -14,6 +14,6 @@ class IInteractableInterface
 {
 	GENERATED_BODY()
 public:
-    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 	void OnInteract(ACharacterControler* PlayerController, int32 IdItem);
 };
